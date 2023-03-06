@@ -1,11 +1,75 @@
+import { useState } from 'react'
 import Head from 'next/head'
-import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
+import { CldImage, CldUploadWidget } from 'next-cloudinary'
 
 const inter = Inter({ subsets: ['latin'] })
 
+const PAISAJE_BACKGROUNDS = [
+  {
+    id: 'cloudinary-project/cielo-colorido_y7ja9i',
+    title: 'Cielo Colorido',
+    width: 800,
+    height: 600,
+  },
+  {
+    id: 'cloudinary-project/siluetas-arboles_snqil1',
+    title: 'Siluetas Arboles',
+    width: 800,
+    height: 600,
+  },
+  {
+    id: 'cloudinary-project/Lago-hallstat_xqxufd',
+    title: 'Lago hallstat',
+    width: 800,
+    height: 600,
+  },
+  {
+    id: 'cloudinary-project/puesta-sol_od3zyq',
+    title: 'Puesta de sol',
+    width: 800,
+    height: 600,
+  },
+  {
+    id: 'cloudinary-project/paisaje-rocos_h1w7rz',
+    title: 'Paisaje Rocoso',
+    width: 800,
+    height: 600,
+  },
+  {
+    id: 'cloudinary-project/cielo-estrellado_mojttd',
+    title: 'Cielo Estrellado',
+    width: 800,
+    height: 600,
+  },
+  {
+    id: 'cloudinary-project/olas_sg1unz',
+    title: 'Olas mar',
+    width: 800,
+    height: 600,
+  },
+]
+
 export default function Home() {
+  const [topText, setTopText] = useState('Top Text')
+  const [bottomText, setBottomText] = useState('Bottom Text')
+  const [background, setBackground] = useState(PAISAJE_BACKGROUNDS[0].id)
+
+  function handleOnTopTextChange(e) {
+    setTopText(e.currentTarget.value)
+  }
+  function handleOnBottomTextChange(e) {
+    setBottomText(e.currentTarget.value)
+  }
+  function handleOnBackgroundChange(id) {
+    setBackground(id)
+  }
+  function handleOnBackgroundUpload (result) {
+    setBackground(result.info.public_id)
+  }
+
+
   return (
     <>
       <Head>
@@ -15,107 +79,101 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>src/pages/index.js</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
-          </div>
-        </div>
 
         <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-          <div className={styles.thirteen}>
-            <Image
-              src="/thirteen.svg"
-              alt="13"
-              width={40}
-              height={31}
-              priority
-            />
+          <div>
+            <form>
+              <div className={styles.inputOne} >
+                <input type='text' name='top-text' onChange={handleOnTopTextChange} />
+              </div>
+              <div>
+                <input type='text' name='bottom-text' onChange={handleOnBottomTextChange} />
+              </div>
+
+              <div>
+                <ul className={styles.backgrounds}>
+                  {PAISAJE_BACKGROUNDS.map(({ id, title, width, height }) => {
+                    return (
+                      <li key={id} className={styles.imageCards} onClick={() => { handleOnBackgroundChange(id) }}>
+                        <CldImage
+                          src={ id }
+                          alt={title}
+                          width={width}
+                          height={height}
+                        />
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
+              <div>
+                <CldUploadWidget uploadPreset="cloudinary-project-bg" onUpload={handleOnBackgroundUpload}>
+                  {({ open }) => {
+                    function handleOnClick(e) {
+                      e.preventDefault();
+                      open();
+                    }
+                    return (
+                      <button onClick={handleOnClick}>
+                        Upload an Image
+                      </button>
+                    );
+                  }}
+                </CldUploadWidget>
+              </div>
+
+            </form>
+
           </div>
-        </div>
 
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
+          <div className={styles.image}>
+            <CldImage
+              src={ background }
+              width='320'
+              height='320'
+              crop='fill'
+              alt='jugg will blade ur face'
+              overlays={[
+                {
+                  width: 2670 - 20,
+                  crop: 'fit',
+                  position: {
+                    x: 0,
+                    y: 20,
+                    gravity: 'north',
+                  },
+                  text: {
+                    color: 'white',
+                    fontFamily: 'Source Sans Pro',
+                    fontSize: 40,
+                    fontWeight: 'bold',
+                    text: topText,
+                    stroke: true,
+                    border: '8px_solid_black'
+                  }
+                },
+                {
+                  width: 2670 - 20,
+                  crop: 'fit',
+                  position: {
+                    x: 0,
+                    y: 20,
+                    gravity: 'south',
+                  },
+                  text: {
+                    color: 'yellow',
+                    fontFamily: 'Source Sans Pro',
+                    fontSize: 40,
+                    fontWeight: 'bold',
+                    text: bottomText,
+                    stroke: true,
+                    border: '8px_solid_black'
+                  }
+                }
+              ]}
+            />
 
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
+          </div>
         </div>
       </main>
     </>
