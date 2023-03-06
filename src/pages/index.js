@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
@@ -56,6 +56,13 @@ export default function Home() {
   const [bottomText, setBottomText] = useState('Bot lane')
   const [background, setBackground] = useState(PAISAJE_BACKGROUNDS[0].id)
 
+  const [grayscal, setOnGrayscale] = useState(false)
+  const [blured, setOnBlur] = useState(false)
+  const [tinted, setOnTint] = useState(false)
+  const [pixelated, setOnPixelate] = useState(false)
+  const [oppacity, setOnOpacity] = useState('100')
+  const [zoomed, setOnZoom] = useState(false)
+
   function handleOnTopTextChange(e) {
     setTopText(e.currentTarget.value)
   }
@@ -82,67 +89,90 @@ export default function Home() {
 
         <div className={styles.center}>
           <div>
-            <form>
-              <div className={styles.inputOne} >
-                <input type='text' name='top-text' onChange={handleOnTopTextChange} />
-              </div>
-              <div>
-                <input type='text' name='bottom-text' onChange={handleOnBottomTextChange} />
-              </div>
+            <div className={styles.cardsImages}>
+              <ul className={styles.backgrounds}>
+                {PAISAJE_BACKGROUNDS.map(({ id, title, width, height }) => {
+                  return (
+                    <li key={id} className={styles.imageCards} onClick={() => { handleOnBackgroundChange(id) }}>
+                      <CldImage
+                        src={id}
+                        alt={title}
+                        width={width}
+                        height={height}
+                      />
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
 
-              <div className={styles.cardsImages}>
-                <ul className={styles.backgrounds}>
-                  {PAISAJE_BACKGROUNDS.map(({ id, title, width, height }) => {
-                    return (
-                      <li key={id} className={styles.imageCards} onClick={() => { handleOnBackgroundChange(id) }}>
-                        <CldImage
-                          src={id}
-                          alt={title}
-                          width={width}
-                          height={height}
-                          
-                        />
-                      </li>
-                    )
-                  })}
-                </ul>
-              </div>
+            <div>
+              <CldUploadWidget uploadPreset="cloudinary-project-bg" onUpload={handleOnBackgroundUpload}>
+                {({ open }) => {
+                  function handleOnClick(e) {
+                    e.preventDefault();
+                    open();
+                  }
+                  return (
+                    <button onClick={handleOnClick}>
+                      Upload an Image
+                    </button>
+                  );
+                }}
+              </CldUploadWidget>
+            </div>
 
-              <div className={styles.buttons1}>
-                <button className={styles.buttons}>Grayscale</button>
-                <button className={styles.buttons}>Blur</button>
-                <button className={styles.buttons}>Tint</button>
-                <button className={styles.buttons}>Opacity</button>
-                <button className={styles.buttons}>Zoom & pan</button>
-                <button className={styles.buttons}>Pixelate</button>
-              </div>
 
-              <div>
-                <CldUploadWidget uploadPreset="cloudinary-project-bg" onUpload={handleOnBackgroundUpload}>
-                  {({ open }) => {
-                    function handleOnClick(e) {
-                      e.preventDefault();
-                      open();
-                    }
-                    return (
-                      <button onClick={handleOnClick}>
-                        Upload an Image
-                      </button>
-                    );
-                  }}
-                </CldUploadWidget>
-              </div>
+            {/* BUTTONS EFFECTS */}
 
-            </form>
+            <div className={styles.buttons1}>
+              <button className={styles.buttons} onClick={() => { setOnGrayscale(!grayscal) }}>Grayscale</button>
 
+              <button className={styles.buttons} onClick={() => { setOnBlur('800') }}>Blur</button>
+              <button className={styles.buttons} onClick={() => { setOnBlur(false) }}>Restore Blur</button>
+
+              <button className={styles.buttons} onClick={() => { setOnTint('equalize:80:blue:blueviolet') }}>Tint</button>
+              <button className={styles.buttons} onClick={() => { setOnTint(false) }}>Restore color</button>
+
+              <button className={styles.buttons} onClick={() => { setOnOpacity('50') }}>Opacity</button>
+              <button className={styles.buttons} onClick={() => { setOnOpacity('100') }}>Restore Opacity</button>
+
+              <button className={styles.buttons} onClick={() => { setOnZoom('loop') }}>Zoom & pan</button>
+              <button className={styles.buttons} onClick={() => { setOnZoom(false) }}>Restore Zoom</button>
+
+              <button className={styles.buttons} onClick={() => { setOnPixelate(!pixelated) }}>Pixelate</button>
+
+            </div>
           </div>
 
+
+
           <div className={styles.image}>
+
+            {/* INPUTS */}
+            <div className={styles.containerInputs}>
+              <div className={styles.inputOne} >
+                <label className={styles.labelOne}>Top Text: </label>
+                <input type='text' name='top-text' onChange={handleOnTopTextChange} />
+              </div>
+              <div className={styles.inputTwo}>
+                <label className={styles.labelOne}>Bot Text: </label>
+                <input type='text' name='bottom-text' onChange={handleOnBottomTextChange} />
+              </div>
+            </div>
+
+            {/* BACKGROUND IMAGES */}
             <CldImage
               src={background}
               width='320'
               height='320'
-              crop='fill'
+              // crop='fill'
+              grayscale={grayscal}
+              blur={blured}
+              pixelate={pixelated}
+              opacity={oppacity}
+              zoompan={zoomed}
+              tint={tinted}
               alt='jugg will blade ur face'
               overlays={[
                 {

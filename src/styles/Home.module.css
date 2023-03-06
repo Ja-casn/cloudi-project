@@ -46,11 +46,26 @@
   display: flex;
   flex-wrap: wrap;
   width: 503px;
-  margin-bottom: 5px;
+  margin: 10px 0px 5px 0px;
 }
 
 .buttons{
   margin: 5px;
   width: 20%;
+}
+
+.containerInputs{
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.inputOne, .inputTwo{
+  margin: 5px;
+}
+
+.labelOne{
+  padding: 5px;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
