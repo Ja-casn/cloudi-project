@@ -12,8 +12,8 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  max-width: 50em;
-  padding: 4rem 0;
+  max-width: 65em;
+  padding: 4rem 0 1rem 1rem;
 }
 
 .backgrounds{
@@ -25,19 +25,32 @@
   margin: 0;
 }
 
-.backgrounds li{
-  width: 50%;
-}
-
 .image{
   flex-shrink: 0;
   width: 30%;
-  margin-left: 20px;
+  margin: 0 2em 0 0;
 }
 
-.inputOne{
+.cardsImages{
+  margin: 5px;
+}
+
+.imageCards{
   display: flex;
-  align-items: center;
+  padding: 5px;
+  margin: 2px;
+  width: 30%;
+}
+
+.buttons1{
+  display: flex;
   flex-wrap: wrap;
+  width: 503px;
+  margin-bottom: 5px;
+}
+
+.buttons{
+  margin: 5px;
+  width: 20%;
 }
 

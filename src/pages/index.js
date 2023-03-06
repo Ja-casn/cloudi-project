@@ -52,8 +52,8 @@ const PAISAJE_BACKGROUNDS = [
 ]
 
 export default function Home() {
-  const [topText, setTopText] = useState('Top Text')
-  const [bottomText, setBottomText] = useState('Bottom Text')
+  const [topText, setTopText] = useState('Cloudinary Project')
+  const [bottomText, setBottomText] = useState('Bot lane')
   const [background, setBackground] = useState(PAISAJE_BACKGROUNDS[0].id)
 
   function handleOnTopTextChange(e) {
@@ -65,7 +65,7 @@ export default function Home() {
   function handleOnBackgroundChange(id) {
     setBackground(id)
   }
-  function handleOnBackgroundUpload (result) {
+  function handleOnBackgroundUpload(result) {
     setBackground(result.info.public_id)
   }
 
@@ -90,22 +90,33 @@ export default function Home() {
                 <input type='text' name='bottom-text' onChange={handleOnBottomTextChange} />
               </div>
 
-              <div>
+              <div className={styles.cardsImages}>
                 <ul className={styles.backgrounds}>
                   {PAISAJE_BACKGROUNDS.map(({ id, title, width, height }) => {
                     return (
                       <li key={id} className={styles.imageCards} onClick={() => { handleOnBackgroundChange(id) }}>
                         <CldImage
-                          src={ id }
+                          src={id}
                           alt={title}
                           width={width}
                           height={height}
+                          
                         />
                       </li>
                     )
                   })}
                 </ul>
               </div>
+
+              <div className={styles.buttons1}>
+                <button className={styles.buttons}>Grayscale</button>
+                <button className={styles.buttons}>Blur</button>
+                <button className={styles.buttons}>Tint</button>
+                <button className={styles.buttons}>Opacity</button>
+                <button className={styles.buttons}>Zoom & pan</button>
+                <button className={styles.buttons}>Pixelate</button>
+              </div>
+
               <div>
                 <CldUploadWidget uploadPreset="cloudinary-project-bg" onUpload={handleOnBackgroundUpload}>
                   {({ open }) => {
@@ -128,7 +139,7 @@ export default function Home() {
 
           <div className={styles.image}>
             <CldImage
-              src={ background }
+              src={background}
               width='320'
               height='320'
               crop='fill'
