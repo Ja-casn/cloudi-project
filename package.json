@@ -16,7 +16,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
-  "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
+  "description": "This is a project for the Cloudinary Hackaton",
   "main": "next.config.js",
   "devDependencies": {},
   "author": "",
